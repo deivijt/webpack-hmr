@@ -1,22 +1,24 @@
-// Creamos un servidor en express
+// Se incluye webpack-dashboard
 const express = require('express')
-const app = express()
 const path = require('path')
 const webpack = require('webpack')
-// requerimos la misma configuración de webpack
-const config = require('./webpack.config')
+const config = require('./webpack.config.js')
+const Dashboard = require('webpack-dashboard')
+const DashboardPlugin = require('webpack-dashboard/plugin')
+const app = express()
 const compiler = webpack(config)
+const dashboard = new Dashboard()
 
-// para cargar los estáticos, por ejemplo el index.html
+compiler.apply(new DashboardPlugin(dashboard.setData))
 app.use(express.static(path.resolve('./dist')))
 
-// aquí es donde utilizamos a webpack como middleware
 app.use(require('webpack-dev-middleware')(compiler, {
-  publicPath: config.output.publicPath,
-  noInfo: true
+  quiet: true,
+  publicPath: config.output.publicPath
 }))
 
-// hablitamos el hot-middleware
-app.use(require('webpack-hot-middleware')(compiler))
+app.use(require('webpack-hot-middleware')(compiler, {
+  log: () => {}
+}))
 
 app.listen(8080, () => console.log('localhost:8080'))
