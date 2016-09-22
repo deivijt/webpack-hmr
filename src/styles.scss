@@ -1,0 +1,16 @@
+$azulito : #0D2A36;
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  background: $azulito;
+}
+
+.container {
+  color: $azulito;
+  background: #fff;
+  text-align: center;
+  width: 80vw;
+}
